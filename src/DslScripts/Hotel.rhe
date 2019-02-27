@@ -1,0 +1,9 @@
+ Module Hoteli
+{
+    Entity Hotel
+    {
+        ShortString Code { AutoCode; }
+        ShortString Title;
+        Integer NumberOfRooms;
+    }
+}
