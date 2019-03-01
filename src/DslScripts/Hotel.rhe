@@ -77,7 +77,12 @@
         Date CheckIn { Required; }
         Date CheckOut { Required; }
         Integer BrojOsoba { Required; }
-        Bool StatusRezervacije;
+        Reference StatusRezervacije Hoteli.StatusRezervacije;
+    }
+
+    Entity StatusRezervacije
+    {
+        ShortString Naziv { Required; }
     }
 
     Entity Racun
