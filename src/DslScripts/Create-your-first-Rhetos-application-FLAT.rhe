@@ -1,0 +1,13 @@
+Module Bookstore;
+
+Entity Bookstore.Book;
+
+ShortString Bookstore.Book.Code;
+AutoCode Bookstore.Book.Code;
+
+ShortString Bookstore.Book.Title;
+
+Integer Bookstore.Book.NumberOfPages;
+
+ItemFilter Bookstore.Book.CommonMisspelling 'item => item.Title.Contains("curiousity")';
+InvalidData Bookstore.Book.CommonMisspelling 'It is not allowed to enter misspelled word "curiousity".';
