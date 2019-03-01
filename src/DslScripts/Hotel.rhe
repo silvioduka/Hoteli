@@ -2,8 +2,84 @@
 {
     Entity Hotel
     {
-        ShortString Code { AutoCode; }
-        ShortString Title;
-        Integer NumberOfRooms;
+        ShortString Naziv { Required; }
+        Integer BrojSoba { Required; }
+        Reference Info Hoteli.Info;
+        Integer BrojZvjezdica { Required; }
+        Bool Bazen;
+        Bool Restoran;
+        Bool Tenis;
+    }
+
+    Entity Soba
+    {
+        Reference Hotel Hoteli.Hotel;
+        Reference TipSobe Hoteli.TipSobe;
+        ShortString Naziv;
+        ShortString BrojSobe { Required; }
+        Decimal NadoplataParking;
+        Decimal Taksa;
+        Bool Klimatizirana;
+        Bool WiFi;
+        Bool PogledNaMore;
+        Bool Slobodna { Required; }
+    }
+
+    Entity TipSobe
+    {
+        ShortString Tip;
+        Integer BrojKreveta { Required; }
+        Decimal Cijena; 
+    }
+
+    Entity Gost
+    {
+        ShortString Ime { Required; }
+        ShortString Prezime { Required; }
+        Reference Info Hotel.Info;
+        Decimal JacinaPrijateljstvaSaGazdom { Required; }
+        Reference BrojSobe Hoteli.BrojSobe;
+    }
+
+    Entity Info
+    {
+        Reference Drzava Hoteli.Drzava
+        Reference Grad Hoteli.Grad
+        ShortString Ulica { Required; }
+        ShortString KucniBroj { Required; }
+        ShortString OIB { Required; }
+        ShortString BrojTelefona { Required; }
+        ShortString Email;
+        ShortString Web;
+    }
+
+    Entity Drzava
+    {
+        ShortString ImeDrzave;
+    }
+
+    Entity Grad
+    {
+        ShortString ImeGrada;
+    }
+
+    Entity KalendarRezervacija
+    {
+        Reference Soba Hoteli.Soba
+        Reference Gost Hoteli.Gost
+        Date CheckIn { Required; }
+        Date CheckOut { Required; }
+        Integer BrojOsoba { Required; }
+    }
+
+    Entity Racun
+    {
+        ShortString Broj { AutoCode; }
+        Reference Gost Hoteli.Gost;
+        Reference Hotel Hoteli.Hotel;
+        Date DatumIzdavanja { Required; }
+        Integer BrojDana { Required; }
+        Decimal Popust { Required; }
+        Decimal Iznos { Required; }
     }
 }
