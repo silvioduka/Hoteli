@@ -4,21 +4,21 @@
     {
         ShortString Naziv { Required; }
         Integer BrojSoba { Required; }
-        Reference InfoID Hoteli.Info;
+        Reference OpcenitoInfo Hoteli.OpcenitoInfo;
         Integer BrojZvjezdica { Required; }
     }
 
     Entity SadrzajHotela
     {
-        Reference HotelID Hoteli.Hotel;
-        ShortString OpisSadrzajaHotela;
-        Decimal NadoplataSadrzaja;
+        Reference Hotel Hoteli.Hotel;
+        ShortString OpisSadrzajaHotela { Required; }
+        Decimal NadoplataSadrzaja { Required; }
     }
 
     Entity Soba
     {
-        Reference HotelID Hoteli.Hotel;
-        Reference TipSobeID Hoteli.TipSobe;
+        Reference Hotel Hoteli.Hotel;
+        Reference TipSobe Hoteli.TipSobe;
         ShortString BrojSobe { Required; }
         ShortString NazivSobe;
         Decimal Taksa;
@@ -27,31 +27,31 @@
 
     Entity SadrzajSobe
     {
-        Reference SobaID Hoteli.Soba;
-        ShortString OpisSadrzajaSobe;
-        Decimal NadoplataZaSadrzaj;
+        Reference Soba Hoteli.Soba;
+        ShortString OpisSadrzajaSobe { Required; }
+        Decimal NadoplataZaSadrzaj { Required; }
     }
 
     Entity TipSobe
     {
-        ShortString Tip;
+        ShortString Tip { Required; }
         Integer BrojKreveta { Required; }
-        Decimal Cijena; 
+        Decimal Cijena { Required; }
     }
 
     Entity Gost
     {
         ShortString Ime { Required; }
         ShortString Prezime { Required; }
-        Reference InfoID Hotel.Info;
+        Reference OpcenitoInfo Hoteli.OpcenitoInfo;
         Decimal JacinaPrijateljstvaSaGazdom { Required; }
-        Reference BrojSobe Hoteli.BrojSobe;
+        Reference BrojSobe Hoteli.Soba;
     }
 
-    Entity Info
+    Entity OpcenitoInfo
     {
-        Reference DrzavaID Hoteli.Drzava
-        Reference GradID Hoteli.Grad
+        Reference Drzava Hoteli.Drzava;
+        Reference Grad Hoteli.Grad;
         ShortString Ulica { Required; }
         ShortString KucniBroj { Required; }
         ShortString OIB { Required; }
@@ -72,8 +72,8 @@
 
     Entity KalendarRezervacija
     {
-        Reference SobaID Hoteli.Soba
-        Reference GostID Hoteli.Gost
+        Reference Soba Hoteli.Soba;
+        Reference Gost Hoteli.Gost;
         Date CheckIn { Required; }
         Date CheckOut { Required; }
         Integer BrojOsoba { Required; }
@@ -83,8 +83,8 @@
     Entity Racun
     {
         ShortString Broj { AutoCode; }
-        Reference GostID Hoteli.Gost;
-        Reference HotelID Hoteli.Hotel;
+        Reference Gost Hoteli.Gost;
+        Reference Hotel Hoteli.Hotel;
         Date DatumIzdavanja { Required; }
         Integer BrojDana { Required; }
         Decimal Popust { Required; }
