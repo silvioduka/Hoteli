@@ -2,24 +2,24 @@
 {
     Entity Hotel
     {
-        ShortString Naziv { Required; }
+        ShortString Naziv { Required; Unique; }
         Integer BrojSoba { Required; }
-        Reference OpcenitoInfo Hoteli.OpcenitoInfo;
+        Reference OpcenitoInfo Hoteli.HotelInfo { Required; Detail;}
         Integer BrojZvjezdica { Required; }
     }
 
     Entity SadrzajHotela
     {
-        Reference Hotel Hoteli.Hotel;
+        Reference Hotel Hoteli.Hotel { Required; }
         ShortString OpisSadrzajaHotela { Required; }
         Decimal NadoplataSadrzaja { Required; }
     }
 
     Entity Soba
     {
-        Reference Hotel Hoteli.Hotel;
-        Reference TipSobe Hoteli.TipSobe;
-        ShortString BrojSobe { Required; }
+        Reference Hotel Hoteli.Hotel { Required; }
+        Reference TipSobe Hoteli.TipSobe { Required; }
+        ShortString BrojSobe { Required; Unique; }
         ShortString NazivSobe;
         Decimal Taksa;
         Bool Slobodna { Required; }
@@ -27,7 +27,7 @@
 
     Entity SadrzajSobe
     {
-        Reference Soba Hoteli.Soba;
+        Reference Soba Hoteli.Soba { Required; }
         ShortString OpisSadrzajaSobe { Required; }
         Decimal NadoplataZaSadrzaj { Required; }
     }
@@ -43,21 +43,37 @@
     {
         ShortString Ime { Required; }
         ShortString Prezime { Required; }
-        Reference OpcenitoInfo Hoteli.OpcenitoInfo;
+        Reference OpcenitoInfo Hoteli.GostInfo { Required; Detail; }
         Decimal JacinaPrijateljstvaSaGazdom { Required; }
-        Reference BrojSobe Hoteli.Soba;
+        Reference BrojSobe Hoteli.Soba { Required; }
     }
 
     Entity OpcenitoInfo
     {
-        Reference Drzava Hoteli.Drzava;
-        Reference Grad Hoteli.Grad;
+        Reference Drzava Hoteli.Drzava { Required; }
+        Reference Grad Hoteli.Grad { Required; }
         ShortString Ulica { Required; }
         ShortString KucniBroj { Required; }
-        ShortString OIB { Required; }
+    }
+
+    Entity HotelInfo
+    {
+        Extends Hoteli.OpcenitoInfo;
+
         ShortString BrojTelefona { Required; }
+        ShortString BrojFaxa { Required; }
         ShortString Email;
         ShortString Web;
+    }
+
+    Entity GostInfo
+    {
+        Extends Hoteli.OpcenitoInfo;
+
+        ShortString OIB { Required; Unique; }
+        ShortString BrojTelefona { Required; }
+        ShortString BrojMobilnogTelefona { Required; }
+        ShortString Email;
     }
 
     Entity Drzava
@@ -72,12 +88,12 @@
 
     Entity KalendarRezervacija
     {
-        Reference Soba Hoteli.Soba;
-        Reference Gost Hoteli.Gost;
+        Reference Soba Hoteli.Soba { Required; }
+        Reference Gost Hoteli.Gost { Required; }
         Date CheckIn { Required; }
         Date CheckOut { Required; }
         Integer BrojOsoba { Required; }
-        Reference StatusRezervacije Hoteli.StatusRezervacije;
+        Reference StatusRezervacije Hoteli.StatusRezervacije { Required; }
     }
 
     Entity StatusRezervacije
@@ -88,8 +104,8 @@
     Entity Racun
     {
         ShortString Broj { AutoCode; }
-        Reference Gost Hoteli.Gost;
-        Reference Hotel Hoteli.Hotel;
+        Reference Gost Hoteli.Gost { Required; }
+        Reference Hotel Hoteli.Hotel { Required; }
         Date DatumIzdavanja { Required; }
         Integer BrojDana { Required; }
         Decimal Popust { Required; }
