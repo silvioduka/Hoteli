@@ -4,7 +4,7 @@
     {
         ShortString Naziv { Required; Unique; }
         Integer BrojSoba { Required; }
-        Reference OpcenitoInfo Hoteli.HotelInfo { Required; Detail;}
+        Reference Info Hoteli.HotelInfo { Required; Detail;}
         Integer BrojZvjezdica { Required; }
     }
 
@@ -43,14 +43,13 @@
     {
         ShortString Ime { Required; }
         ShortString Prezime { Required; }
-        Reference OpcenitoInfo Hoteli.GostInfo { Required; Detail; }
+        Reference Info Hoteli.GostInfo { Required; Detail; }
         Decimal JacinaPrijateljstvaSaGazdom { Required; }
         Reference BrojSobe Hoteli.Soba { Required; }
     }
 
     Entity OpcenitoInfo
-    {
-        Reference Adresa Hoteli.Adresa { Required; }
+    {        
         ShortString BrojTelefona { Required; }
         ShortString Email;
     }
@@ -59,6 +58,7 @@
     {
         Extends Hoteli.OpcenitoInfo;
 
+        Reference Adresa Hoteli.AdresaHotela { Required; }
         ShortString BrojFaxa { Required; }
         ShortString Web;
     }
@@ -67,8 +67,16 @@
     {
         Extends Hoteli.OpcenitoInfo;
 
+        Reference Adresa Hoteli.Adresa { Required; }
         ShortString OIB { Required; Unique; }
         ShortString BrojMobilnogTelefona { Required; }
+    }
+
+    Entity AdresaHotela
+    {
+        Extends Adresa Hoteli.Adresa;
+
+        Reference Geocoordinate Hoteli.Geocoordinate;
     }
 
     Entity Adresa
@@ -78,6 +86,12 @@
         Reference Grad Hoteli.Grad { Required; }
         ShortString Ulica { Required; }
         ShortString KucniBroj { Required; }
+    }
+
+    Entity Geocoordinate
+    {
+        ShortString Latitude { Required; }
+        ShortString Longitude { Required; }
     }
 
     Entity Drzava
