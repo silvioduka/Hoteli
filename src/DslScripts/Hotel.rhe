@@ -50,10 +50,7 @@
 
     Entity OpcenitoInfo
     {
-        Reference Drzava Hoteli.Drzava { Required; }
-        Reference Grad Hoteli.Grad { Required; }
-        ShortString Ulica { Required; }
-        ShortString KucniBroj { Required; }
+        Reference Adresa Hoteli.Adresa { Required; }
         ShortString BrojTelefona { Required; }
         ShortString Email;
     }
@@ -74,9 +71,23 @@
         ShortString BrojMobilnogTelefona { Required; }
     }
 
+    Entity Adresa
+    {
+        Reference Drzava Hoteli.Drzava { Required; }
+        Reference Zupanija Hoteli.Zupanija { Required; }
+        Reference Grad Hoteli.Grad { Required; }
+        ShortString Ulica { Required; }
+        ShortString KucniBroj { Required; }
+    }
+
     Entity Drzava
     {
         ShortString ImeDrzave;
+    }
+
+    Entity Zupanija
+    {
+        ShortString ImeZupanije;
     }
 
     Entity Grad
