@@ -74,7 +74,7 @@
 
     Entity AdresaHotela
     {
-        Extends Adresa Hoteli.Adresa;
+        Extends Hoteli.Adresa;
 
         Reference Geocoordinate Hoteli.Geocoordinate;
     }
