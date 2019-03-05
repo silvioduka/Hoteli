@@ -20,7 +20,7 @@
         Reference Hotel Hoteli.Hotel { Required; }
         Reference TipSobe Hoteli.TipSobe { Required; }
         ShortString BrojSobe { Required; Unique; }
-        ShortString NazivSobe;
+        ShortString NazivSobe { Unique; }
         Decimal Taksa;
         Bool Slobodna { Required; }
     }
@@ -54,15 +54,15 @@
         Reference Grad Hoteli.Grad { Required; }
         ShortString Ulica { Required; }
         ShortString KucniBroj { Required; }
+        ShortString BrojTelefona { Required; }
+        ShortString Email;
     }
 
     Entity HotelInfo
     {
         Extends Hoteli.OpcenitoInfo;
 
-        ShortString BrojTelefona { Required; }
         ShortString BrojFaxa { Required; }
-        ShortString Email;
         ShortString Web;
     }
 
@@ -71,9 +71,7 @@
         Extends Hoteli.OpcenitoInfo;
 
         ShortString OIB { Required; Unique; }
-        ShortString BrojTelefona { Required; }
         ShortString BrojMobilnogTelefona { Required; }
-        ShortString Email;
     }
 
     Entity Drzava
@@ -84,6 +82,7 @@
     Entity Grad
     {
         ShortString ImeGrada;
+        ShortString PostanskiBroj;
     }
 
     Entity KalendarRezervacija
