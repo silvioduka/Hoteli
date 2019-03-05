@@ -4,7 +4,7 @@
     {
         ShortString Naziv { Required; Unique; }
         Integer BrojSoba { Required; }
-        Reference Info Hoteli.HotelInfo { Required; Detail;}
+        Reference HotelInfo Hoteli.HotelInfo { Required; Detail;}
         Integer BrojZvjezdica { Required; }
     }
 
@@ -43,7 +43,7 @@
     {
         ShortString Ime { Required; }
         ShortString Prezime { Required; }
-        Reference Info Hoteli.GostInfo { Required; Detail; }
+        Reference GostInfo Hoteli.GostInfo { Required; Detail; }
         Decimal JacinaPrijateljstvaSaGazdom { Required; }
         Reference BrojSobe Hoteli.Soba { Required; }
     }
