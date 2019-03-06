@@ -2,55 +2,55 @@
 {
     Entity Hotel
     {
-        ShortString Naziv { Required; Unique; }
-        Integer BrojSoba { Required; }
-        Reference HotelInfo Hoteli.HotelInfo { Required; Detail;}
-        Integer BrojZvjezdica { Required; }
+        ShortString Naziv { Unique; }
+        Integer BrojSoba;
+        Reference HotelInfo Hoteli.HotelInfo;
+        Integer BrojZvjezdica;
     }
 
     Entity SadrzajHotela
     {
-        Reference Hotel Hoteli.Hotel { Required; }
-        ShortString OpisSadrzajaHotela { Required; }
-        Decimal NadoplataSadrzaja { Required; }
+        Reference Hotel Hoteli.Hotel;
+        ShortString OpisSadrzajaHotela;
+        Decimal NadoplataSadrzaja;
     }
 
     Entity Soba
     {
-        Reference Hotel Hoteli.Hotel { Required; }
-        Reference TipSobe Hoteli.TipSobe { Required; }
-        ShortString BrojSobe { Required; Unique; }
+        Reference Hotel Hoteli.Hotel;
+        Reference TipSobe Hoteli.TipSobe;
+        ShortString BrojSobe { Unique; }
         ShortString NazivSobe { Unique; }
         Decimal Taksa;
-        Bool Slobodna { Required; }
+        Bool Slobodna;
     }
 
     Entity SadrzajSobe
     {
-        Reference Soba Hoteli.Soba { Required; }
-        ShortString OpisSadrzajaSobe { Required; }
-        Decimal NadoplataZaSadrzaj { Required; }
+        Reference Soba Hoteli.Soba;
+        ShortString OpisSadrzajaSobe;
+        Decimal NadoplataZaSadrzaj;
     }
 
     Entity TipSobe
     {
-        ShortString Tip { Required; }
-        Integer BrojKreveta { Required; }
-        Decimal Cijena { Required; }
+        ShortString Tip;
+        Integer BrojKreveta;
+        Decimal Cijena;
     }
 
     Entity Gost
     {
-        ShortString Ime { Required; }
-        ShortString Prezime { Required; }
-        Reference GostInfo Hoteli.GostInfo { Required; Detail; }
-        Decimal JacinaPrijateljstvaSaGazdom { Required; }
-        Reference BrojSobe Hoteli.Soba { Required; }
+        ShortString Ime;
+        ShortString Prezime;
+        Reference GostInfo Hoteli.GostInfo { Detail; }
+        Decimal JacinaPrijateljstvaSaGazdom;
+        Reference BrojSobe Hoteli.Soba;
     }
 
     Entity OpcenitoInfo
     {        
-        ShortString BrojTelefona { Required; }
+        ShortString BrojTelefona;
         ShortString Email;
     }
 
@@ -58,8 +58,8 @@
     {
         Extends Hoteli.OpcenitoInfo;
 
-        Reference Adresa Hoteli.AdresaHotela { Required; }
-        ShortString BrojFaxa { Required; }
+        Reference Adresa Hoteli.AdresaHotela;
+        ShortString BrojFaxa;
         ShortString Web;
     }
 
@@ -67,9 +67,9 @@
     {
         Extends Hoteli.OpcenitoInfo;
 
-        Reference Adresa Hoteli.Adresa { Required; }
-        ShortString OIB { Required; Unique; }
-        ShortString BrojMobilnogTelefona { Required; }
+        Reference Adresa Hoteli.Adresa;
+        ShortString OIB { Unique; }
+        ShortString BrojMobilnogTelefona;
     }
 
     Entity AdresaHotela
@@ -81,17 +81,17 @@
 
     Entity Adresa
     {
-        Reference Drzava Hoteli.Drzava { Required; }
-        Reference Zupanija Hoteli.Zupanija { Required; }
-        Reference Grad Hoteli.Grad { Required; }
-        ShortString Ulica { Required; }
-        ShortString KucniBroj { Required; }
+        Reference Drzava Hoteli.Drzava;
+        Reference Zupanija Hoteli.Zupanija;
+        Reference Grad Hoteli.Grad;
+        ShortString Ulica;
+        ShortString KucniBroj;
     }
 
     Entity Geocoordinate
     {
-        ShortString Latitude { Required; }
-        ShortString Longitude { Required; }
+        ShortString Latitude;
+        ShortString Longitude;
     }
 
     Entity Drzava
@@ -112,27 +112,38 @@
 
     Entity KalendarRezervacija
     {
-        Reference Soba Hoteli.Soba { Required; }
-        Reference Gost Hoteli.Gost { Required; }
-        Date CheckIn { Required; }
-        Date CheckOut { Required; }
-        Integer BrojOsoba { Required; }
-        Reference StatusRezervacije Hoteli.StatusRezervacije { Required; }
+        Reference Soba Hoteli.Soba;
+        Reference Gost Hoteli.Gost;
+        Date CheckIn;
+        Date CheckOut;
+        Integer BrojOsoba;
+        Reference StatusRezervacije Hoteli.StatusRezervacije;
     }
 
     Entity StatusRezervacije
     {
-        ShortString Naziv { Required; }
+        ShortString Naziv;
     }
 
     Entity Racun
     {
         ShortString Broj { AutoCode; }
-        Reference Gost Hoteli.Gost { Required; }
-        Reference Hotel Hoteli.Hotel { Required; }
-        Date DatumIzdavanja { Required; }
-        Integer BrojDana { Required; }
-        Decimal Popust { Required; }
-        Decimal Iznos { Required; }
+        Reference Gost Hoteli.Gost;
+        Reference Hotel Hoteli.Hotel;
+        Date DatumIzdavanja;
+        Integer BrojDana;
+        Decimal Popust;
+        Decimal Iznos;
     }
+
+    Action Insert5Hotela
+    '
+        (parameter, repository, userInfo) =>
+        {
+            for(int i=0; i<5; i++)
+            {
+                var noviHotel = new Hoteli.Hotel { Naziv = "Novi Hotel", BrojSoba = 100};
+                repository.Hoteli.Hotel.Insert(noviHotel);
+            }
+        }';
 }
