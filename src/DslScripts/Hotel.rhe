@@ -5,31 +5,41 @@
         ShortString Naziv { Required; Unique; }
         Integer BrojSoba { Required; }
         Reference HotelInfo Hoteli.HotelInfo { Required; Detail;}
-        Integer BrojZvjezdica { Required; }
+        Integer BrojZvjezdica { Required; MinValue 1; MaxValue 5; }
     }
 
     Entity SadrzajHotela
     {
-        Reference Hotel Hoteli.Hotel { Required; }
         ShortString OpisSadrzajaHotela { Required; }
         Decimal NadoplataSadrzaja { Required; }
+    }
+
+    Entity SadrzajHotelaMap
+    {
+        Reference Hotel Hoteli.Hotel { Required; }
+        Reference SadrzajHotela Hoteli.SadrzajHotela { Required; }
     }
 
     Entity Soba
     {
         Reference Hotel Hoteli.Hotel { Required; }
         Reference TipSobe Hoteli.TipSobe { Required; }
-        ShortString BrojSobe { Required; Unique; }
-        ShortString NazivSobe { Unique; }
+        ShortString BrojSobe { Required; }
+        ShortString NazivSobe { MinLength 4; MaxLength 10; }
         Decimal Taksa;
         Bool Slobodna { Required; }
     }
 
     Entity SadrzajSobe
     {
-        Reference Soba Hoteli.Soba { Required; }
         ShortString OpisSadrzajaSobe { Required; }
-        Decimal NadoplataZaSadrzaj { Required; }
+        Decimal NadoplataSadrzaja { Required; }
+    }
+
+    Entity SadrzajSobeMap
+    {
+        Reference Soba Hoteli.Soba { Required; }
+        Reference SadrzajSobe Hoteli.SadrzajSobe { Required; }
     }
 
     Entity TipSobe
@@ -43,8 +53,9 @@
     {
         ShortString Ime { Required; }
         ShortString Prezime { Required; }
+        Date DatumRodjenja { Required; }
         Reference GostInfo Hoteli.GostInfo { Required; Detail; }
-        Decimal JacinaPrijateljstvaSaGazdom { Required; }
+        Decimal JacinaPrijateljstvaSaGazdom { Required; MinValue 0; MaxValue 100;}
         Reference BrojSobe Hoteli.Soba { Required; }
     }
 
@@ -68,7 +79,7 @@
         Extends Hoteli.OpcenitoInfo;
 
         Reference Adresa Hoteli.Adresa { Required; }
-        ShortString OIB { Required; Unique; }
+        ShortString OIB { Required; Unique; RegExMatch "\d{11}" "Must contain 11 digits.";}
         ShortString BrojMobilnogTelefona { Required; }
     }
 
@@ -116,8 +127,11 @@
         Reference Gost Hoteli.Gost { Required; }
         Date CheckIn { Required; }
         Date CheckOut { Required; }
-        Integer BrojOsoba { Required; }
+        Integer BrojOsoba { Required; MinValue 1;}
         Reference StatusRezervacije Hoteli.StatusRezervacije { Required; }
+
+        ItemFilter CheckOutBeforeCheckIn 'item => item.CheckOut.Value < item.CheckIn.Value';
+        InvalidData CheckOutBeforeCheckIn 'It is not allowed to enter a CheckOut time before the CheckIn time.';
     }
 
     Entity StatusRezervacije
@@ -134,5 +148,31 @@
         Integer BrojDana { Required; }
         Decimal Popust { Required; }
         Decimal Iznos { Required; }
+    }
+
+    SqlQueryable SveInformacijeOHotelu <sql\sveinformacijeohotelu.sql>
+    {
+        ShortString Naziv;
+        Integer BrojSoba;
+        Integer BrojZvjezdica;
+        ShortString BrojTelefona;
+        ShortString BrojFaxa;
+        ShortString Email;
+        ShortString Web;
+        ShortString Ulica;
+        ShortString KucniBroj;
+        ShortString Grad;
+        ShortString PostanskiBroj;
+        ShortString Zupanija;
+        ShortString Drzava;
+        ShortString Latitude;
+        ShortString Longitude;
+    }
+
+    SqlQueryable SviSadrzajiHotela <sql\svisadrzajihotela.sql>
+    {
+        ShortString Naziv;
+        ShortString OpisSadrzajaHotela;
+        Decimal NadoplataZaSadrzaj;
     }
 }
