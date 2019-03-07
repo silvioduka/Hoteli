@@ -57,12 +57,19 @@
         Reference GostInfo Hoteli.GostInfo { Required; Detail; }
         Decimal JacinaPrijateljstvaSaGazdom { Required; MinValue 0; MaxValue 100;}
         Reference BrojSobe Hoteli.Soba { Required; }
+
+        ItemFilter TooMuch 'item => item.JacinaPrijateljstvaSaGazdom > 100';
+		InvalidData TooMuch 'JacinaPrijateljstvaSaGazdom may not be larger than 100.';
+
+        Logging { AllProperties; }
     }
 
     Entity OpcenitoInfo
     {        
         ShortString BrojTelefona { Required; }
         ShortString Email;
+
+        Logging { AllProperties; }
     }
 
     Entity HotelInfo
@@ -81,6 +88,8 @@
         Reference Adresa Hoteli.Adresa { Required; }
         ShortString OIB { Required; Unique; RegExMatch "\d{11}" "Must contain 11 digits.";}
         ShortString BrojMobilnogTelefona { Required; }
+
+        Logging { AllProperties; }
     }
 
     Entity AdresaHotela
@@ -97,6 +106,8 @@
         Reference Grad Hoteli.Grad { Required; }
         ShortString Ulica { Required; }
         ShortString KucniBroj { Required; }
+
+        Logging { AllProperties; }
     }
 
     Entity Geocoordinate
@@ -132,6 +143,8 @@
 
         ItemFilter CheckOutBeforeCheckIn 'item => item.CheckOut.Value < item.CheckIn.Value';
         InvalidData CheckOutBeforeCheckIn 'It is not allowed to enter a CheckOut time before the CheckIn time.';
+
+        Logging { AllProperties; }
     }
 
     Entity StatusRezervacije
@@ -148,6 +161,8 @@
         Integer BrojDana { Required; }
         Decimal Popust { Required; }
         Decimal Iznos { Required; }
+
+        Logging { AllProperties; }
     }
 
     SqlQueryable SveInformacijeOHotelu <sql\sveinformacijeohotelu.sql>
