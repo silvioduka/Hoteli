@@ -1,0 +1,42 @@
+Module Rezervacije
+{
+    AutodetectSqlDependencies;
+    
+    Entity Rezervacija
+    {
+        Reference Soba Sobe.Soba { Required; }
+        Reference Gost Gosti.Gost { Required; }
+        Date CheckIn { Required; }
+        Date CheckOut { Required; }
+        Integer BrojOsoba { Required; MinValue 1;}
+        Reference StatusRezervacije Rezervacije.StatusRezervacije { Required; }
+
+        DateTime VrijemeZadnjeIzmjene;
+
+        ItemFilter CheckOutBeforeCheckIn 'item => item.CheckOut.Value < item.CheckIn.Value';
+        InvalidData CheckOutBeforeCheckIn 'It is not allowed to enter a CheckOut time before the CheckIn time.';
+
+        Logging { AllProperties; }
+
+        SaveMethod
+        {
+            Initialization PostaviVrijemeZadnjeIzmjene
+            '{
+                foreach(var newItem in insertedNew.Concat(updatedNew))
+                    newItem.VrijemeZadnjeIzmjene = DateTime.Now;
+            }';
+        }
+    }
+
+    Entity StatusRezervacije
+    {
+        ShortString Naziv { Required; }
+    }
+
+    SqlQueryable SobaBrojRezervacija <sql\rezervacijasoba.sql>
+    {
+        ShortString BrojSobe;
+        ShortString NazivHotela ;
+        Integer BrojRezervacijaPoSobi; 
+    }
+}

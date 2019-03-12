@@ -1,0 +1,20 @@
+Module Racuni
+{
+    AutodetectSqlDependencies;
+    
+    Entity Racun
+    {
+        Sifarnik;
+
+        ShortString Broj { AutoCode; }
+        Reference Gost Gosti.Gost { Required; }
+        Reference Hotel Hoteli.Hotel { Required; }
+        Date DatumIzdavanja { Required; }
+        Date DatumPlacanja { Required; }
+        Integer BrojDana { Required; }
+        Decimal Popust { Required; }
+        Decimal Iznos { Required; }
+
+        Logging { AllProperties; }
+    }
+}

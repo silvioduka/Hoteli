@@ -1,0 +1,56 @@
+Module Gosti
+{
+    AutodetectSqlDependencies;
+        
+    Entity Gost
+    {
+        ShortString Ime { Required; }
+        ShortString Prezime { Required; }
+        Date DatumRodjenja { Required; }
+        Reference GostInfo Informacije.GostInfo { Required; Detail; }
+        Decimal JacinaPrijateljstvaSaGazdom { Required; MinValue 0; MaxValue 100;}
+        Reference BrojSobe Sobe.Soba { Required; }
+
+        ItemFilter TooMuch 'item => item.JacinaPrijateljstvaSaGazdom > 100';
+		InvalidData TooMuch 'JacinaPrijateljstvaSaGazdom may not be larger than 100.';
+
+        ComposableFilterBy PreJakoPrijateljstvo '(query, repository, parameter) =>
+        {
+                if(parameter.Not == true)
+                    return query.Where(item => !(item.JacinaPrijateljstvaSaGazdom > parameter.DozvoljenoPrijateljstvo));
+                else
+                    return query.Where(item => item.JacinaPrijateljstvaSaGazdom > parameter.DozvoljenoPrijateljstvo);
+        }';
+
+        FilterBy PreJakoPrijateljstvo2 '(repository, parameter) =>
+        {
+                var query = repository.Gosti.Gost.Query();
+
+                if(parameter.Not == true)
+                    return query.Where(item => !(item.JacinaPrijateljstvaSaGazdom > parameter.DozvoljenoPrijateljstvo)).ToSimple().ToArray();
+                else
+                    return query.Where(item => item.JacinaPrijateljstvaSaGazdom > parameter.DozvoljenoPrijateljstvo).ToSimple().ToArray();
+        }';
+
+        Logging { AllProperties; }
+    }
+
+    Parameter PreJakoPrijateljstvo
+    {
+        Decimal DozvoljenoPrijateljstvo;
+        Bool Not;
+    }
+
+    Parameter PreJakoPrijateljstvo2
+    {
+        Decimal DozvoljenoPrijateljstvo;
+        Bool Not;
+    }
+
+    Browse GostGrid Gosti.Gost
+    {
+        Take Ime;
+        Take Prezime;
+        Take DatumRodjenja;
+    }
+}

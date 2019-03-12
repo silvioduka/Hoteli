@@ -1,11 +1,24 @@
  Module Hoteli
 {
+    AutodetectSqlDependencies;
+
     Entity Hotel
     {
         ShortString Naziv { Required; Unique; }
         Integer BrojSoba { Required; }
-        Reference HotelInfo Hoteli.HotelInfo { Required; Detail;}
+        Reference HotelInfo Informacije.HotelInfo { Required; Detail;}
         Integer BrojZvjezdica { Required; MinValue 1; MaxValue 5; }
+
+        DateTime VrijemeZadnjeIzmjene;
+
+        SaveMethod
+        {
+            Initialization PostaviVrijemeZadnjeIzmjene
+            '{
+                foreach(var newItem in insertedNew.Concat(updatedNew))
+                    newItem.VrijemeZadnjeIzmjene = DateTime.Now;
+            }';
+        }
     }
 
     Entity SadrzajHotela
@@ -18,170 +31,6 @@
     {
         Reference Hotel Hoteli.Hotel { Required; }
         Reference SadrzajHotela Hoteli.SadrzajHotela { Required; }
-    }
-
-    Entity Soba
-    {
-        Reference Hotel Hoteli.Hotel { Required; }
-        Reference TipSobe Hoteli.TipSobe { Required; }
-        ShortString BrojSobe { Required; }
-        ShortString NazivSobe { MinLength 4; MaxLength 10; }
-        Decimal Taksa;
-        Bool Slobodna { Required; }
-    }
-
-    Entity SadrzajSobe
-    {
-        ShortString OpisSadrzajaSobe { Required; }
-        Decimal NadoplataSadrzaja { Required; }
-    }
-
-    Entity SadrzajSobeMap
-    {
-        Reference Soba Hoteli.Soba { Required; }
-        Reference SadrzajSobe Hoteli.SadrzajSobe { Required; }
-    }
-
-    Entity TipSobe
-    {
-        ShortString Tip { Required; }
-        Integer BrojKreveta { Required; }
-        Decimal Cijena { Required; }
-    }
-
-    Entity Gost
-    {
-        ShortString Ime { Required; }
-        ShortString Prezime { Required; }
-        Date DatumRodjenja { Required; }
-        Reference GostInfo Hoteli.GostInfo { Required; Detail; }
-        Decimal JacinaPrijateljstvaSaGazdom { Required; MinValue 0; MaxValue 100;}
-        Reference BrojSobe Hoteli.Soba { Required; }
-
-        ItemFilter TooMuch 'item => item.JacinaPrijateljstvaSaGazdom > 100';
-		InvalidData TooMuch 'JacinaPrijateljstvaSaGazdom may not be larger than 100.';
-
-        Logging { AllProperties; }
-    }
-
-    Entity OpcenitoInfo
-    {        
-        ShortString BrojTelefona { Required; }
-        ShortString Email;
-
-        Logging { AllProperties; }
-    }
-
-    Entity HotelInfo
-    {
-        Extends Hoteli.OpcenitoInfo;
-
-        Reference Adresa Hoteli.AdresaHotela { Required; }
-        ShortString BrojFaxa { Required; }
-        ShortString Web;
-    }
-
-    Entity GostInfo
-    {
-        Extends Hoteli.OpcenitoInfo;
-
-        Reference Adresa Hoteli.Adresa { Required; }
-        ShortString OIB { Required; Unique; RegExMatch "\d{11}" "Must contain 11 digits.";}
-        ShortString BrojMobilnogTelefona { Required; }
-
-        Logging { AllProperties; }
-    }
-
-    Entity AdresaHotela
-    {
-        Extends Hoteli.Adresa;
-
-        Reference Geocoordinate Hoteli.Geocoordinate;
-    }
-
-    Entity Adresa
-    {
-        Reference Drzava Hoteli.Drzava { Required; }
-        Reference Zupanija Hoteli.Zupanija { Required; }
-        Reference Grad Hoteli.Grad { Required; }
-        ShortString Ulica { Required; }
-        ShortString KucniBroj { Required; }
-
-        Logging { AllProperties; }
-    }
-
-    Entity Geocoordinate
-    {
-        ShortString Latitude { Required; }
-        ShortString Longitude { Required; }
-    }
-
-    Entity Drzava
-    {
-        ShortString ImeDrzave;
-    }
-
-    Entity Zupanija
-    {
-        ShortString ImeZupanije;
-    }
-
-    Entity Grad
-    {
-        ShortString ImeGrada;
-        ShortString PostanskiBroj;
-    }
-
-    Entity KalendarRezervacija
-    {
-        Reference Soba Hoteli.Soba { Required; }
-        Reference Gost Hoteli.Gost { Required; }
-        Date CheckIn { Required; }
-        Date CheckOut { Required; }
-        Integer BrojOsoba { Required; MinValue 1;}
-        Reference StatusRezervacije Hoteli.StatusRezervacije { Required; }
-
-        ItemFilter CheckOutBeforeCheckIn 'item => item.CheckOut.Value < item.CheckIn.Value';
-        InvalidData CheckOutBeforeCheckIn 'It is not allowed to enter a CheckOut time before the CheckIn time.';
-
-        Logging { AllProperties; }
-    }
-
-    Entity StatusRezervacije
-    {
-        ShortString Naziv { Required; }
-    }
-
-    Entity Racun
-    {
-        ShortString Broj { AutoCode; }
-        Reference Gost Hoteli.Gost { Required; }
-        Reference Hotel Hoteli.Hotel { Required; }
-        Date DatumIzdavanja { Required; }
-        Integer BrojDana { Required; }
-        Decimal Popust { Required; }
-        Decimal Iznos { Required; }
-
-        Logging { AllProperties; }
-    }
-
-    SqlQueryable SveInformacijeOHotelu <sql\sveinformacijeohotelu.sql>
-    {
-        ShortString Naziv;
-        Integer BrojSoba;
-        Integer BrojZvjezdica;
-        ShortString BrojTelefona;
-        ShortString BrojFaxa;
-        ShortString Email;
-        ShortString Web;
-        ShortString Ulica;
-        ShortString KucniBroj;
-        ShortString Grad;
-        ShortString PostanskiBroj;
-        ShortString Zupanija;
-        ShortString Drzava;
-        ShortString Latitude;
-        ShortString Longitude;
     }
 
     SqlQueryable SviSadrzajiHotela <sql\svisadrzajihotela.sql>

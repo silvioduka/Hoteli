@@ -1,0 +1,40 @@
+Module Sobe
+{
+    AutodetectSqlDependencies;
+    
+    Entity Soba
+    {
+        Reference Hotel Hoteli.Hotel { Required; }
+        Reference TipSobe Sobe.TipSobe { Required; }
+        ShortString BrojSobe { Required; }
+        ShortString NazivSobe { MinLength 4; MaxLength 10; }
+        Decimal Taksa;
+        Bool Slobodna { Required; }
+    }
+
+    Entity SadrzajSobe
+    {
+        ShortString OpisSadrzajaSobe { Required; }
+        Decimal NadoplataSadrzaja { Required; }
+    }
+
+    Entity SadrzajSobeMap
+    {
+        Reference Soba Sobe.Soba { Required; }
+        Reference SadrzajSobe Sobe.SadrzajSobe { Required; }
+    }
+
+    Entity TipSobe
+    {
+        ShortString Tip { Required; }
+        Integer BrojKreveta { Required; }
+        Decimal Cijena { Required; }
+    }
+
+    SqlQueryable SobaBrojRezervacija <sql\rezervacijasoba.sql>
+    {
+        ShortString BrojSobe;
+        ShortString NazivHotela ;
+        Integer BrojRezervacijaPoSobi; 
+    }
+}

@@ -1,0 +1,53 @@
+Module Informacije
+{
+    AutodetectSqlDependencies;
+    
+    Entity OpcenitoInfo
+    {        
+        ShortString BrojTelefona { Required; }
+        ShortString Email;
+
+        Logging { AllProperties; }
+    }
+
+    Entity HotelInfo
+    {
+        Extends Informacije.OpcenitoInfo;
+
+        Reference Adresa Adrese.AdresaHotela { Required; }
+        ShortString BrojFaxa { Required; }
+        ShortString Web;
+    }
+
+    Entity GostInfo
+    {
+        Extends Informacije.OpcenitoInfo;
+
+        Reference Adresa Adrese.Adresa { Required; }
+        ShortString OIB { Required; Unique; RegExMatch "\d{11}" "Must contain 11 digits.";}
+        ShortString BrojMobilnogTelefona { Required; }
+
+        Logging { AllProperties; }
+    }
+
+    SqlQueryable SveInformacijeOHotelu <sql\sveinformacijeohotelu.sql>
+    {
+        ShortString Naziv;
+        Integer BrojSoba;
+        Integer BrojZvjezdica;
+        ShortString BrojTelefona;
+        ShortString BrojFaxa;
+        ShortString Email;
+        ShortString Web;
+        ShortString Ulica;
+        ShortString KucniBroj;
+        ShortString Grad;
+        ShortString PostanskiBroj;
+        ShortString Zupanija;
+        ShortString Drzava;
+        ShortString Latitude;
+        ShortString Longitude;
+
+        AutodetectSqlDependencies;
+    }
+}

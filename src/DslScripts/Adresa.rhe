@@ -1,0 +1,44 @@
+Module Adrese
+{
+    AutodetectSqlDependencies;
+
+    Entity Adresa
+    {
+        Reference Drzava Adrese.Drzava { Required; }
+        Reference Zupanija Adrese.Zupanija { Required; }
+        Reference Grad Adrese.Grad { Required; }
+        ShortString Ulica { Required; }
+        ShortString KucniBroj { Required; }
+
+        Logging { AllProperties; }
+    }
+
+    Entity Geocoordinate
+    {
+        ShortString Latitude { Required; }
+        ShortString Longitude { Required; }
+    }
+
+    Entity Drzava
+    {
+        ShortString ImeDrzave;
+    }
+
+    Entity Zupanija
+    {
+        ShortString ImeZupanije;
+    }
+
+    Entity Grad
+    {
+        ShortString ImeGrada;
+        ShortString PostanskiBroj;
+    }
+
+    Entity AdresaHotela
+    {
+        Extends Adrese.Adresa;
+
+        Reference Geocoordinate Adrese.Geocoordinate;
+    }
+}
